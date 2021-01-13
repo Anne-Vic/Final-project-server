@@ -7,7 +7,7 @@ const requireAuth = require("../middlewares/requireAuth");
 //GET ALL EVENTS
 router.get("/", (req, res, next) => {
   Event.find({})
-    //   .populate("owner")
+    .populate("owner")
     .then((eventDocuments) => {
       res.status(200).json(eventDocuments);
     })
@@ -22,7 +22,7 @@ router.get("/:id", (req, res, next) => {
 });
 
 //CREATE ONE EVENT
-router.post("/", uploader.single("eventImg"), (req, res, next) => {
+router.post("/", requireAuth, uploader.single("eventImg"), (req, res, next) => {
   const updateValues = { ...req.body };
 
   if (req.file) {
@@ -33,9 +33,7 @@ router.post("/", uploader.single("eventImg"), (req, res, next) => {
 
   Event.create(updateValues)
     .then((eventDocument) => {
-      eventDocument;
-      //   .populate("owner")
-      //   .execPopulate()
+      eventDocument.populate("owner").execPopulate();
     })
     .then((event) => {
       console.log("event created");
