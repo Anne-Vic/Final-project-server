@@ -14,6 +14,16 @@ router.get("/", (req, res, next) => {
     .catch(next);
 });
 
+//GET ALL EVENTS OF ONE USER
+router.get("/mine", (req, res, next) => {
+  Event.find({ owner: req.session.currentUser })
+    .populate("owner")
+    .then((eventDocuments) => {
+      res.status(200).json(eventDocuments);
+    })
+    .catch(next);
+});
+
 //GET ONE EVENT
 router.get("/:id", (req, res, next) => {
   Event.findById(req.params.id)
