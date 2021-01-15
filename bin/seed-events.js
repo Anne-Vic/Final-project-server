@@ -12,7 +12,7 @@ const events = [
     time: "10h00",
     eventImg: "./Profil.PNG",
     description: "Looking for a tennis partner",
-    status: "Uncomplete",
+    status: "false",
     level: "Beginner",
   },
   {
@@ -24,7 +24,7 @@ const events = [
     time: "14h00",
     eventImg: "./Profil.PNG",
     description: "Sparring partner for a 1H session",
-    status: "Uncomplete",
+    status: "false",
     level: "Advanced",
   },
 ];

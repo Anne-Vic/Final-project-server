@@ -7,16 +7,16 @@ const eventSchema = new Schema({
   city: { type: String, required: true },
   country: { type: String, required: true },
   meetingPoint: { type: String, required: true },
-  time: { type: String },
+  time: { type: String, required: true },
   eventImg: {
     type: String,
-    default: "./Profil.PNG",
+    default: "/Duo.jpg",
   },
   description: { type: String, required: true },
-  status: {
-    type: String,
-    required: true,
-    enum: ["Uncomplete", "Complete"],
+  isComplete: {
+    type: Boolean,
+    // required: true,
+    enum: ["true", "false"],
   },
   level: {
     type: String,

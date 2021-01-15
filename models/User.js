@@ -7,7 +7,7 @@ const userSchema = new Schema({
   username: { type: String, required: true },
   profileImg: {
     type: String,
-    // default: "./Profil.PNG",
+    default: "/Profil.PNG",
   },
   eventCreated: [{ type: Schema.Types.ObjectId, ref: "Event" }],
   eventJoined: [{ type: Schema.Types.ObjectId, ref: "Event" }],

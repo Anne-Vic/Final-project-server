@@ -16,9 +16,11 @@ router.get("/", (req, res, next) => {
 
 //GET ONE EVENT
 router.get("/:id", (req, res, next) => {
-  Event.findById(req.params.id).then((eventDocument) => {
-    res.status(200).json(eventDocument);
-  });
+  Event.findById(req.params.id)
+    .populate("owner")
+    .then((eventDocument) => {
+      res.status(200).json(eventDocument);
+    });
 });
 
 //CREATE ONE EVENT
@@ -29,7 +31,7 @@ router.post("/", requireAuth, uploader.single("eventImg"), (req, res, next) => {
     updateValues.image = req.file.path;
   }
 
-  updateValues.id_user = req.session.currentUser;
+  updateValues.owner = req.session.currentUser;
 
   Event.create(updateValues)
     .then((eventDocument) => {
@@ -79,10 +81,13 @@ router.patch(
 router.delete("/:id", requireAuth, (req, res, next) => {
   Event.findById(req.params.id)
     .then((eventDocument) => {
+      console.log(req.params);
       if (!eventDocument) {
         return res.status(404).json({ message: "Event not found" });
       }
       if (eventDocument.owner.toString() !== req.session.currentUser) {
+        console.log("owner", eventDocument.owner.toString());
+        console.log("session user", req.session.currentUser);
         return res.status(403).json({ message: "You can't delete this event" });
       }
 
