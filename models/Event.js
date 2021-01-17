@@ -10,12 +10,13 @@ const eventSchema = new Schema({
   time: { type: String, required: true },
   eventImg: {
     type: String,
-    default: "/Duo.jpg",
+    default:
+      "https://res.cloudinary.com/djfnm2nsv/image/upload/v1610666964/Catch/Duo_m5ooon.jpg",
   },
   description: { type: String, required: true },
   isComplete: {
     type: Boolean,
-    // required: true,
+    required: true,
     enum: ["true", "false"],
   },
   level: {
