@@ -33,12 +33,29 @@ router.get("/:id", (req, res, next) => {
     });
 });
 
+//GET ALL MESSAGES OF ONE EVENT
+router.get("/:id/messages", (req, res, next) => {
+  console.log(req.params.id);
+  Event.findById(req.params.id)
+    .populate("messages")
+    .populate({
+      path: "messages",
+      populate: {
+        path: "author",
+        model: "User",
+      },
+    })
+    .then((eventDocument) => {
+      res.status(200).json(eventDocument);
+    });
+});
+
 //CREATE ONE EVENT
 router.post("/", requireAuth, uploader.single("eventImg"), (req, res, next) => {
   const updateValues = { ...req.body };
 
   if (req.file) {
-    updateValues.image = req.file.path;
+    updateValues.eventImg = req.file.path; /*changer image par eventImg*/
   }
 
   updateValues.owner = req.session.currentUser;
@@ -61,6 +78,7 @@ router.patch(
   uploader.single("eventImg"),
   (req, res, next) => {
     const event = { ...req.body };
+    console.log(event);
 
     Event.findById(req.params.id)
       .then((eventDocument) => {
@@ -73,8 +91,9 @@ router.patch(
         }
 
         if (req.file) {
-          event.eventImg = req.file.secure_url;
+          event.eventImg = req.file.path;
         }
+        console.log(req.file);
 
         Event.findByIdAndUpdate(req.params.id, event, { new: true })
           .populate("owner")

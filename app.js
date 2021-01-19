@@ -11,6 +11,20 @@ const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
 
+// SOCKET IO
+// const server = require("http").Server(app);
+// const io = require("socket.io")(server);
+
+// io.on("connection", (socket) => {
+//   console.log(`Connecté au client ${socket.id}`);
+//   // émission d'un évènement
+//   io.emit("news", "Voici un nouvel élément envoyé par le serveur");
+// });
+
+// server.listen(3000, function () {
+//   console.log("Votre app est disponible sur localhost:3000 !");
+// });
+
 /**
  * Middlewares
  */
@@ -45,10 +59,12 @@ app.use(function (req, res, next) {
 const authRouter = require("./routes/auth");
 // const usersRouter = require("./routes/users");
 const eventsRouter = require("./routes/events");
+const messagesRouter = require("./routes/messages");
 
 app.use("/api/auth", authRouter);
 // app.use("/api/users", usersRouter);
 app.use("/api/events", eventsRouter);
+app.use("/api/messages", messagesRouter);
 
 // 404 Middleware
 app.use((req, res, next) => {
