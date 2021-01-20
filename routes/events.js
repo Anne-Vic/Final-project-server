@@ -78,7 +78,7 @@ router.patch(
   uploader.single("eventImg"),
   (req, res, next) => {
     const event = { ...req.body };
-    console.log(event);
+    console.log("req body", event);
 
     Event.findById(req.params.id)
       .then((eventDocument) => {
@@ -93,7 +93,8 @@ router.patch(
         if (req.file) {
           event.eventImg = req.file.path;
         }
-        console.log(req.file);
+
+        console.log("req", req.file);
 
         Event.findByIdAndUpdate(req.params.id, event, { new: true })
           .populate("owner")
