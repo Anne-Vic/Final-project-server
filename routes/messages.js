@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message");
+const requireAuth = require("../middlewares/requireAuth");
 
 // GET MESSAGES FOR ONE EVENT
 router.get("/by-event/:id", function (req, res, next) {
@@ -36,6 +37,31 @@ router.get("/mine", (req, res, next) => {
     .populate("event author")
     .then((eventDocuments) => {
       res.status(200).json(eventDocuments);
+    })
+    .catch(next);
+});
+
+// // DELETE ONE MESSAGE
+router.delete("/:id", requireAuth, (req, res, next) => {
+  Message.findById(req.params.id)
+    .then((messageDocument) => {
+      console.log(req.params);
+      if (!messageDocument) {
+        return res.status(404).json({ message: "Message not found" });
+      }
+      if (messageDocument.author.toString() !== req.session.currentUser) {
+        console.log("author", messageDocument.author.toString());
+        console.log("session user", req.session.currentUser);
+        return res
+          .status(403)
+          .json({ message: "You can't delete this message" });
+      }
+
+      Message.findByIdAndDelete(req.params.id)
+        .then(() => {
+          return res.sendStatus(204);
+        })
+        .catch(next);
     })
     .catch(next);
 });
